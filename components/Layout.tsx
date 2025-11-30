@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X, Phone, MapPin, Mail, ChevronDown } from 'lucide-react';
+import { AnimatePresence, motion } from 'framer-motion';
 import { NAVIGATION, BUSINESS_INFO } from '../constants';
 import Button from './ui/Button';
 
@@ -17,6 +18,11 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
   return (
     <div className="flex flex-col min-h-screen font-sans text-slate-800 bg-white">
+      {/* Accessibility Skip Link */}
+      <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 z-50 bg-white text-primary p-4 border border-primary rounded shadow-lg">
+        Skip to main content
+      </a>
+
       {/* Top Bar */}
       <div className="bg-primary text-slate-300 py-2 text-sm hidden md:block">
         <div className="container mx-auto px-4 flex justify-between items-center">
@@ -25,7 +31,13 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
             <span className="flex items-center gap-2"><MapPin size={14} /> {BUSINESS_INFO.location}</span>
           </div>
           <div className="flex gap-4">
-             <span>Midtown Manhattan's Premier Implant Center</span>
+             <motion.span 
+               initial={{ opacity: 0 }} 
+               animate={{ opacity: 1 }} 
+               transition={{ delay: 0.5 }}
+             >
+               Midtown Manhattan's Premier Implant Center
+             </motion.span>
           </div>
         </div>
       </div>
@@ -35,8 +47,8 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         <div className="container mx-auto px-4">
           <div className="flex justify-between items-center h-24">
             {/* Logo */}
-            <Link to="/" className="flex flex-col">
-              <span className="font-serif text-2xl md:text-3xl font-bold text-primary tracking-tight">NYC Implant Dentist</span>
+            <Link to="/" className="flex flex-col group">
+              <span className="font-serif text-2xl md:text-3xl font-bold text-primary tracking-tight group-hover:text-secondary transition-colors">NYC Implant Dentist</span>
               <span className="text-xs tracking-widest text-secondary font-medium uppercase">Dr. Alex Gause D.D.S.</span>
             </Link>
 
@@ -50,44 +62,67 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                   onMouseLeave={() => setActiveDropdown(null)}
                 >
                   {item.children ? (
-                    <button className="flex items-center gap-1 py-4 text-sm font-medium text-slate-600 hover:text-secondary uppercase tracking-wider transition-colors">
+                    <button className="flex items-center gap-1 py-4 text-sm font-medium text-slate-600 hover:text-secondary uppercase tracking-wider transition-colors relative">
                       {item.label}
                       <ChevronDown size={14} />
+                      {activeDropdown === item.label && (
+                        <motion.div 
+                          layoutId="navUnderline"
+                          className="absolute bottom-2 left-0 right-0 h-0.5 bg-secondary" 
+                        />
+                      )}
                     </button>
                   ) : (
                     <Link 
                       to={item.path}
-                      className="text-sm font-medium text-slate-600 hover:text-secondary uppercase tracking-wider transition-colors"
+                      className="relative py-4 text-sm font-medium text-slate-600 hover:text-secondary uppercase tracking-wider transition-colors"
                     >
                       {item.label}
+                      {location.pathname === item.path && (
+                        <motion.div 
+                          layoutId="navUnderline"
+                          className="absolute bottom-2 left-0 right-0 h-0.5 bg-secondary" 
+                        />
+                      )}
                     </Link>
                   )}
 
                   {/* Dropdown */}
-                  {item.children && (
-                    <div className="absolute top-full left-0 w-64 bg-white shadow-lg border-t-2 border-secondary opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform translate-y-2 group-hover:translate-y-0">
-                      {item.children.map((child) => (
-                        <Link
-                          key={child.path}
-                          to={child.path}
-                          className="block px-6 py-3 text-sm text-slate-600 hover:bg-slate-50 hover:text-secondary border-b border-gray-50 last:border-0"
-                        >
-                          {child.label}
-                        </Link>
-                      ))}
-                    </div>
-                  )}
+                  <AnimatePresence>
+                    {item.children && activeDropdown === item.label && (
+                      <motion.div
+                        initial={{ opacity: 0, y: 10, rotateX: -5 }}
+                        animate={{ opacity: 1, y: 0, rotateX: 0 }}
+                        exit={{ opacity: 0, y: 10, transition: { duration: 0.15 } }}
+                        transition={{ duration: 0.2 }}
+                        className="absolute top-full left-0 w-64 bg-white shadow-xl border-t-2 border-secondary origin-top z-50"
+                      >
+                        {item.children.map((child) => (
+                          <Link
+                            key={child.path}
+                            to={child.path}
+                            className="block px-6 py-3 text-sm text-slate-600 hover:bg-slate-50 hover:text-secondary border-b border-gray-50 last:border-0 transition-colors"
+                          >
+                            {child.label}
+                          </Link>
+                        ))}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                 </div>
               ))}
-              <Button href={BUSINESS_INFO.bookingUrl} className="ml-4 shadow-md">
-                Book Online
-              </Button>
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                <Button href={BUSINESS_INFO.bookingUrl} className="ml-4 shadow-md">
+                  Book Online
+                </Button>
+              </motion.div>
             </nav>
 
             {/* Mobile Menu Button */}
             <button 
               className="lg:hidden text-primary p-2"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              aria-label="Toggle Menu"
             >
               {isMobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
             </button>
@@ -96,60 +131,74 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
       </header>
 
       {/* Mobile Menu Overlay */}
-      {isMobileMenuOpen && (
-        <div className="fixed inset-0 z-40 bg-white pt-24 pb-8 px-4 overflow-y-auto lg:hidden">
-          <div className="flex flex-col space-y-4">
-            {NAVIGATION.map((item) => (
-              <div key={item.label}>
-                {item.children ? (
-                  <div>
-                    <button 
-                      className="flex items-center justify-between w-full text-lg font-medium text-primary py-2"
-                      onClick={() => setActiveDropdown(activeDropdown === item.label ? null : item.label)}
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <motion.div 
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "100vh" }}
+            exit={{ opacity: 0, height: 0 }}
+            className="fixed inset-0 z-40 bg-white pt-24 pb-8 px-4 overflow-y-auto lg:hidden"
+          >
+            <div className="flex flex-col space-y-4">
+              {NAVIGATION.map((item) => (
+                <div key={item.label}>
+                  {item.children ? (
+                    <div>
+                      <button 
+                        className="flex items-center justify-between w-full text-lg font-medium text-primary py-2"
+                        onClick={() => setActiveDropdown(activeDropdown === item.label ? null : item.label)}
+                      >
+                        {item.label}
+                        <ChevronDown size={16} className={`transform transition-transform duration-300 ${activeDropdown === item.label ? 'rotate-180' : ''}`} />
+                      </button>
+                      <AnimatePresence>
+                        {activeDropdown === item.label && (
+                          <motion.div 
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: "auto", opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            className="overflow-hidden pl-4 border-l-2 border-gray-100 ml-2"
+                          >
+                            {item.children.map((child) => (
+                              <Link 
+                                key={child.path} 
+                                to={child.path}
+                                className="block text-slate-600 py-2"
+                                onClick={() => setIsMobileMenuOpen(false)}
+                              >
+                                {child.label}
+                              </Link>
+                            ))}
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </div>
+                  ) : (
+                    <Link 
+                      to={item.path}
+                      className="block text-lg font-medium text-primary py-2"
+                      onClick={() => setIsMobileMenuOpen(false)}
                     >
                       {item.label}
-                      <ChevronDown size={16} className={`transform transition-transform ${activeDropdown === item.label ? 'rotate-180' : ''}`} />
-                    </button>
-                    {activeDropdown === item.label && (
-                      <div className="pl-4 border-l-2 border-gray-100 ml-2 mt-2 space-y-2">
-                        {item.children.map((child) => (
-                          <Link 
-                            key={child.path} 
-                            to={child.path}
-                            className="block text-slate-600 py-2"
-                            onClick={() => setIsMobileMenuOpen(false)}
-                          >
-                            {child.label}
-                          </Link>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                ) : (
-                  <Link 
-                    to={item.path}
-                    className="block text-lg font-medium text-primary py-2"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    {item.label}
-                  </Link>
-                )}
+                    </Link>
+                  )}
+                </div>
+              ))}
+              <div className="pt-8 space-y-4">
+                <Button href={BUSINESS_INFO.bookingUrl} className="w-full justify-center">
+                  Book Online
+                </Button>
+                <Button href={`tel:${BUSINESS_INFO.phone}`} variant="outline" className="w-full justify-center">
+                  Call Now
+                </Button>
               </div>
-            ))}
-            <div className="pt-8 space-y-4">
-              <Button href={BUSINESS_INFO.bookingUrl} className="w-full justify-center">
-                Book Online
-              </Button>
-              <Button href={`tel:${BUSINESS_INFO.phone}`} variant="outline" className="w-full justify-center">
-                Call Now
-              </Button>
             </div>
-          </div>
-        </div>
-      )}
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Main Content */}
-      <main className="flex-grow">
+      <main id="main-content" className="flex-grow">
         {children}
       </main>
 
@@ -162,9 +211,6 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
               <p className="text-slate-400 mb-6 leading-relaxed">
                 Advanced implant dentistry and oral rehabilitation in the heart of Midtown Manhattan. Where technology meets expertise.
               </p>
-              <div className="flex space-x-4">
-                {/* Social icons placeholder */}
-              </div>
             </div>
             
             <div>

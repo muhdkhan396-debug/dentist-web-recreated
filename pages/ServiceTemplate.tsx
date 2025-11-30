@@ -2,7 +2,11 @@ import React from 'react';
 import { useLocation, Navigate } from 'react-router-dom';
 import { SERVICE_CONTENT } from '../data/services';
 import Button from '../components/ui/Button';
+import SEO from '../components/SEO';
+import Image from '../components/ui/Image';
 import { CheckCircle2 } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { FadeIn, FadeInStagger, FadeInItem } from '../components/ui/Animations';
 import { BUSINESS_INFO } from '../constants';
 
 const ServiceTemplate: React.FC = () => {
@@ -15,23 +19,43 @@ const ServiceTemplate: React.FC = () => {
 
   return (
     <div className="bg-white">
+      <SEO 
+        title={data.title} 
+        description={data.description} 
+      />
       {/* Hero */}
       <div className="relative h-[60vh] md:h-[70vh] flex items-center">
         <div className="absolute inset-0">
           <div className="absolute inset-0 bg-slate-900/60 z-10"></div>
-          <img 
-            src={data.heroImage} 
-            alt={data.title}
-            className="w-full h-full object-cover"
-          />
+          <motion.div
+            key={data.heroImage}
+            initial={{ scale: 1.1, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 1.2 }}
+            className="w-full h-full"
+          >
+            <Image 
+              src={data.heroImage} 
+              alt={data.title}
+              className="w-full h-full object-cover"
+              priority={true}
+              sizes="100vw"
+            />
+          </motion.div>
         </div>
         <div className="container mx-auto px-4 relative z-20">
-          <h1 className="font-serif text-4xl md:text-6xl font-bold text-white mb-6 max-w-4xl">
-            {data.title}
-          </h1>
-          <p className="text-xl md:text-2xl text-slate-200 max-w-2xl font-light">
-            {data.description}
-          </p>
+          <FadeInStagger>
+            <FadeInItem>
+              <h1 className="font-serif text-4xl md:text-6xl font-bold text-white mb-6 max-w-4xl">
+                {data.title}
+              </h1>
+            </FadeInItem>
+            <FadeInItem>
+              <p className="text-xl md:text-2xl text-slate-200 max-w-2xl font-light">
+                {data.description}
+              </p>
+            </FadeInItem>
+          </FadeInStagger>
         </div>
       </div>
 
@@ -39,7 +63,7 @@ const ServiceTemplate: React.FC = () => {
         {/* Main Content */}
         <div className="lg:col-span-2 space-y-16">
           {data.sections.map((section, idx) => (
-            <div key={idx}>
+            <FadeIn key={idx} delay={idx * 0.1}>
               <h2 className="font-serif text-2xl md:text-3xl font-bold text-primary mb-6 relative pl-4 border-l-4 border-secondary">
                 {section.title}
               </h2>
@@ -53,10 +77,17 @@ const ServiceTemplate: React.FC = () => {
               {section.type === 'list' && (
                 <ul className="grid gap-4">
                   {section.content.map((item, i) => (
-                    <li key={i} className="flex items-start gap-3 bg-slate-50 p-4 rounded-lg border border-slate-100">
+                    <motion.li 
+                      key={i} 
+                      initial={{ opacity: 0, x: -20 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: i * 0.1 }}
+                      className="flex items-start gap-3 bg-slate-50 p-4 rounded-lg border border-slate-100"
+                    >
                       <CheckCircle2 className="text-secondary shrink-0 mt-1" size={20} />
                       <span className="text-slate-700">{item}</span>
-                    </li>
+                    </motion.li>
                   ))}
                 </ul>
               )}
@@ -64,22 +95,22 @@ const ServiceTemplate: React.FC = () => {
               {section.type === 'process' && (
                 <div className="space-y-6">
                   {section.content.map((step, i) => (
-                    <div key={i} className="flex gap-4">
+                    <FadeIn key={i} delay={i * 0.1} className="flex gap-4">
                       <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center font-serif font-bold">
                         {i + 1}
                       </div>
                       <p className="text-slate-700 text-lg pt-1">{step.replace(/^\d+\.\s*/, '')}</p>
-                    </div>
+                    </FadeIn>
                   ))}
                 </div>
               )}
-            </div>
+            </FadeIn>
           ))}
         </div>
 
         {/* Sidebar */}
         <div className="lg:col-span-1">
-          <div className="bg-slate-50 p-8 rounded-xl border border-slate-200 sticky top-28">
+          <FadeIn delay={0.4} className="bg-slate-50 p-8 rounded-xl border border-slate-200 sticky top-28">
             <h3 className="font-serif text-2xl font-bold text-primary mb-4">Ready to begin?</h3>
             <p className="text-slate-600 mb-6">
               Schedule your consultation with Dr. Gause to discuss if {data.title} is right for you.
@@ -101,7 +132,7 @@ const ServiceTemplate: React.FC = () => {
               <li className="flex gap-2"><CheckCircle2 size={16} className="text-secondary"/> Kois-Trained Expert</li>
               <li className="flex gap-2"><CheckCircle2 size={16} className="text-secondary"/> Advanced 3D Tech</li>
             </ul>
-          </div>
+          </FadeIn>
         </div>
       </div>
     </div>

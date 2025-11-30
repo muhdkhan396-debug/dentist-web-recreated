@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
 
 interface ButtonProps {
   children: React.ReactNode;
@@ -18,7 +19,7 @@ const Button: React.FC<ButtonProps> = ({
   className = '',
   onClick 
 }) => {
-  const baseClasses = "inline-flex items-center justify-center px-6 py-3 border text-base font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2";
+  const baseClasses = "inline-flex items-center justify-center px-6 py-3 border text-base font-medium transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2";
   
   const variants = {
     primary: "border-transparent text-white bg-secondary hover:bg-amber-700 focus:ring-amber-500 shadow-sm",
@@ -29,26 +30,40 @@ const Button: React.FC<ButtonProps> = ({
 
   const combinedClasses = `${baseClasses} ${variants[variant]} ${className}`;
 
+  const animationProps = {
+    whileHover: { scale: 1.02 },
+    whileTap: { scale: 0.98 },
+    transition: { type: "spring" as const, stiffness: 400, damping: 17 }
+  };
+
   if (to) {
+    const MotionLink = motion(Link);
     return (
-      <Link to={to} className={combinedClasses} onClick={onClick}>
+      <MotionLink to={to} className={combinedClasses} onClick={onClick} {...animationProps}>
         {children}
-      </Link>
+      </MotionLink>
     );
   }
 
   if (href) {
     return (
-      <a href={href} className={combinedClasses} target="_blank" rel="noopener noreferrer" onClick={onClick}>
+      <motion.a 
+        href={href} 
+        className={combinedClasses} 
+        target="_blank" 
+        rel="noopener noreferrer" 
+        onClick={onClick}
+        {...animationProps}
+      >
         {children}
-      </a>
+      </motion.a>
     );
   }
 
   return (
-    <button className={combinedClasses} onClick={onClick}>
+    <motion.button className={combinedClasses} onClick={onClick} {...animationProps}>
       {children}
-    </button>
+    </motion.button>
   );
 };
 
