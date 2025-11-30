@@ -83,7 +83,7 @@ const Image: React.FC<ImageProps> = ({
           srcSet={srcSet}
           sizes={sizes || defaultSizes}
           alt={alt}
-          // @ts-ignore - fetchpriority is valid HTML but might flag in some TS versions
+          // @ts-ignore - fetchpriority is validd HTML but might flag in some TS versions
           fetchpriority={fetchPriority}
           onLoad={() => setIsLoaded(true)}
           onError={() => setHasError(true)}
