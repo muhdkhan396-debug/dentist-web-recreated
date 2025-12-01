@@ -21,13 +21,13 @@ const Button: React.FC<ButtonProps> = ({
   className = '',
   onClick 
 }) => {
-  const baseClasses = "inline-flex items-center justify-center px-6 py-3 border text-base font-medium transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2";
+  const baseClasses = "inline-flex items-center justify-center px-8 py-4 border text-base font-semibold tracking-wide transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 rounded-lg";
   
   const variants = {
-    primary: "border-transparent text-white bg-secondary hover:bg-amber-700 focus:ring-amber-500 shadow-sm",
-    secondary: "border-transparent text-white bg-primary hover:bg-slate-800 focus:ring-slate-500",
-    outline: "border-secondary text-secondary bg-transparent hover:bg-secondary/10",
-    white: "border-transparent text-secondary bg-white hover:bg-gray-50",
+    primary: "border-transparent text-white bg-secondary hover:bg-amber-700 hover:shadow-lg focus:ring-amber-500 shadow-md",
+    secondary: "border-transparent text-white bg-primary hover:bg-slate-800 hover:shadow-lg focus:ring-slate-500 shadow-md",
+    outline: "border-2 border-secondary text-secondary bg-transparent hover:bg-secondary hover:text-white",
+    white: "border-transparent text-primary bg-white hover:bg-gray-50 shadow-md hover:shadow-lg",
   };
 
   const combinedClasses = `${baseClasses} ${variants[variant]} ${className}`;

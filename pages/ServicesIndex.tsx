@@ -47,33 +47,34 @@ const ServicesIndex: React.FC = () => {
         title="Services" 
         description="Comprehensive implant dentistry services in NYC: Single implants, All-on-4, Oral Rehabilitation, and Bone Grafting. Professional care by Dr. Alex Gause."
       />
-      <div className="bg-primary text-white py-20">
-        <div className="container mx-auto px-4 text-center">
+      <div className="bg-slate-900 text-white py-24 relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 z-0"></div>
+        <div className="container mx-auto px-6 text-center relative z-10">
           <FadeIn>
-            <h1 className="font-serif text-4xl md:text-5xl font-bold mb-6">Our Services</h1>
-            <p className="text-xl text-slate-300 max-w-2xl mx-auto">
-              Advanced oral rehabilitation and implant solutions tailored to your unique needs.
+            <h1 className="font-serif text-5xl md:text-6xl font-bold mb-6 tracking-tight">Our Services</h1>
+            <p className="text-xl text-slate-300 max-w-2xl mx-auto font-light leading-relaxed">
+              Advanced oral rehabilitation and implant solutions tailored to your unique needs, powered by digital precision.
             </p>
           </FadeIn>
         </div>
       </div>
 
-      <div className="container mx-auto px-4 py-16">
+      <div className="container mx-auto px-6 py-24 -mt-16 relative z-20">
         <FadeInStagger className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {servicesList.map((service, idx) => (
             <FadeInItem key={idx} className="h-full">
               <Link 
                 to={service.link} 
-                className="block h-full bg-white p-8 rounded-xl shadow-sm border border-slate-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group"
+                className="block h-full bg-white p-10 rounded-xl shadow-lg border border-slate-100 hover:shadow-2xl hover:-translate-y-2 hover:border-secondary/30 transition-all duration-300 group flex flex-col"
               >
-                <div className="w-12 h-12 bg-amber-100 text-secondary rounded-lg flex items-center justify-center mb-6 group-hover:bg-secondary group-hover:text-white transition-colors">
-                  {service.icon}
+                <div className="w-14 h-14 bg-amber-50 text-secondary rounded-xl flex items-center justify-center mb-8 group-hover:bg-secondary group-hover:text-white transition-all duration-300 shadow-sm">
+                  {React.cloneElement(service.icon as React.ReactElement<any>, { size: 28 })}
                 </div>
-                <h3 className="font-serif text-2xl font-bold text-primary mb-4">{service.title}</h3>
-                <p className="text-slate-600 mb-6 leading-relaxed">
+                <h3 className="font-serif text-2xl font-bold text-slate-900 mb-4 group-hover:text-secondary transition-colors">{service.title}</h3>
+                <p className="text-slate-600 mb-8 leading-relaxed flex-grow">
                   {service.desc}
                 </p>
-                <span className="flex items-center text-secondary font-semibold group-hover:gap-2 transition-all">
+                <span className="flex items-center text-secondary font-bold tracking-wide text-sm uppercase group-hover:gap-3 transition-all">
                   Learn More <ArrowRight size={16} className="ml-2" />
                 </span>
               </Link>
@@ -82,12 +83,12 @@ const ServicesIndex: React.FC = () => {
         </FadeInStagger>
       </div>
       
-      <div className="bg-white py-16 border-t border-slate-100">
-         <div className="container mx-auto px-4 text-center">
+      <div className="bg-white py-24 border-t border-slate-100">
+         <div className="container mx-auto px-6 text-center">
             <FadeIn>
-              <h2 className="font-serif text-3xl font-bold text-primary mb-6">Not sure what you need?</h2>
-              <p className="text-slate-600 mb-8">Schedule a consultation for a comprehensive exam and personalized treatment plan.</p>
-              <Button to="/contact">Contact Us</Button>
+              <h2 className="font-serif text-3xl md:text-4xl font-bold text-slate-900 mb-6">Not sure what you need?</h2>
+              <p className="text-xl text-slate-600 mb-10 max-w-2xl mx-auto">Schedule a consultation for a comprehensive exam and personalized treatment plan.</p>
+              <Button to="/contact" className="px-10">Contact Us</Button>
             </FadeIn>
          </div>
       </div>
