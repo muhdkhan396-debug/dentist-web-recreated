@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import * as ReactRouterDOM from 'react-router-dom';
 import { ArrowRight, Star, Shield, Cpu, Heart } from 'lucide-react';
 import { motion } from 'framer-motion';
 import Button from '../components/ui/Button';
@@ -8,7 +8,11 @@ import Image from '../components/ui/Image';
 import { FadeIn, FadeInStagger, FadeInItem } from '../components/ui/Animations';
 import { BUSINESS_INFO, DOCTOR, TESTIMONIALS } from '../constants';
 
+const { Link } = ReactRouterDOM;
+
 const Home: React.FC = () => {
+  const MotionDiv = motion.div as any;
+  
   return (
     <div className="flex flex-col">
       <SEO 
@@ -21,20 +25,20 @@ const Home: React.FC = () => {
         <div className="absolute inset-0 z-0">
           <div className="absolute inset-0 bg-gradient-to-r from-primary via-primary/90 to-transparent z-10"></div>
           <div className="w-full h-full relative">
-            <motion.div
+            <MotionDiv
               initial={{ scale: 1.1, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               transition={{ duration: 1.5, ease: "easeOut" }}
               className="w-full h-full"
             >
               <Image 
-                src="https://images.squarespace-cdn.com/content/v1/664e5061fa71855fc54da6e5/1755119765953-48YUKZRP0U3ZS8HZSWVD/unsplash-image-oe_03B2Q5A4.jpg" 
+                src="https://images.squarespace-cdn.com/content/v1/664e5061fa71855fc54da6e5/1726839646077-8MZF1392BCKYXGTT4N6I/image-asset.jpeg" 
                 alt="Advanced Dental Office in Midtown Manhattan" 
                 className="w-full h-full object-cover object-center"
-                priority={true}
-                sizes="100vw"
+                loading="eager"
+                fetchPriority="high"
               />
-            </motion.div>
+            </MotionDiv>
           </div>
         </div>
         
@@ -101,7 +105,7 @@ const Home: React.FC = () => {
       <section className="py-20 bg-slate-900 text-white relative overflow-hidden">
         <div className="container mx-auto px-4">
           <div className="flex flex-col md:flex-row items-center gap-12">
-            <motion.div 
+            <MotionDiv 
               initial={{ opacity: 0, x: -50 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
@@ -114,10 +118,9 @@ const Home: React.FC = () => {
                   src={DOCTOR.headshot_url} 
                   alt={DOCTOR.name} 
                   className="relative rounded-lg shadow-2xl w-full max-w-md mx-auto grayscale hover:grayscale-0 transition-all duration-500 z-10"
-                  sizes="(max-width: 768px) 100vw, 500px"
                 />
               </div>
-            </motion.div>
+            </MotionDiv>
             <FadeIn direction="left" className="md:w-1/2">
               <h2 className="font-serif text-3xl md:text-5xl font-bold mb-6">Dr. Alex Gause</h2>
               <p className="text-lg text-slate-300 mb-6">
@@ -161,12 +164,7 @@ const Home: React.FC = () => {
                 <div className="mt-auto flex items-center gap-4">
                   {t.image_url && (
                     <div className="w-12 h-12 rounded-full overflow-hidden shrink-0">
-                      <Image 
-                        src={t.image_url} 
-                        alt={t.name} 
-                        className="w-full h-full object-cover" 
-                        sizes="50px"
-                      />
+                      <Image src={t.image_url} alt={t.name} className="w-full h-full object-cover" />
                     </div>
                   )}
                   <div>

@@ -41,7 +41,7 @@ export const SERVICE_CONTENT: Record<string, ServicePageData> = {
     id: 'oral-rehab',
     path: '/oral-rehabilitation',
     title: 'Oral Rehabilitation Specialist',
-    heroImage: 'https://images.squarespace-cdn.com/content/v1/664e5061fa71855fc54da6e5/1755119765953-48YUKZRP0U3ZS8HZSWVD/unsplash-image-oe_03B2Q5A4.jpg',
+    heroImage: 'https://images.squarespace-cdn.com/content/v1/664e5061fa71855fc54da6e5/1726839646077-8MZF1392BCKYXGTT4N6I/image-asset.jpeg',
     description: 'Restore Your Smile. Reclaim Your Confidence. Revitalize Your Health.',
     sections: [
       {

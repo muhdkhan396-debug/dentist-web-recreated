@@ -1,6 +1,8 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import * as ReactRouterDOM from 'react-router-dom';
 import { motion } from 'framer-motion';
+
+const { Link } = ReactRouterDOM;
 
 interface ButtonProps {
   children: React.ReactNode;
@@ -37,7 +39,7 @@ const Button: React.FC<ButtonProps> = ({
   };
 
   if (to) {
-    const MotionLink = motion(Link);
+    const MotionLink = motion(Link as any) as any;
     return (
       <MotionLink to={to} className={combinedClasses} onClick={onClick} {...animationProps}>
         {children}
@@ -45,9 +47,12 @@ const Button: React.FC<ButtonProps> = ({
     );
   }
 
+  const MotionA = motion.a as any;
+  const MotionButton = motion.button as any;
+
   if (href) {
     return (
-      <motion.a 
+      <MotionA 
         href={href} 
         className={combinedClasses} 
         target="_blank" 
@@ -56,14 +61,14 @@ const Button: React.FC<ButtonProps> = ({
         {...animationProps}
       >
         {children}
-      </motion.a>
+      </MotionA>
     );
   }
 
   return (
-    <motion.button className={combinedClasses} onClick={onClick} {...animationProps}>
+    <MotionButton className={combinedClasses} onClick={onClick} {...animationProps}>
       {children}
-    </motion.button>
+    </MotionButton>
   );
 };
 

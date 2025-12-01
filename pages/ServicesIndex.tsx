@@ -1,9 +1,11 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import * as ReactRouterDOM from 'react-router-dom';
 import { ArrowRight, Activity, Smile, PenTool, Layers } from 'lucide-react';
 import Button from '../components/ui/Button';
 import SEO from '../components/SEO';
 import { FadeIn, FadeInStagger, FadeInItem } from '../components/ui/Animations';
+
+const { Link } = ReactRouterDOM;
 
 const servicesList = [
   {

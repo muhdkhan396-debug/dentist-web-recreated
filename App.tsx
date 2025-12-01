@@ -1,5 +1,5 @@
 import React, { Suspense } from 'react';
-import { HashRouter, Routes, Route } from 'react-router-dom';
+import * as ReactRouterDOM from 'react-router-dom';
 import Layout from './components/Layout';
 import LoadingSpinner from './components/ui/LoadingSpinner';
 import ErrorBoundary from './components/ErrorBoundary';
@@ -13,6 +13,8 @@ const Pricing = React.lazy(() => import('./pages/Pricing'));
 const About = React.lazy(() => import('./pages/About'));
 const SmileGallery = React.lazy(() => import('./pages/SmileGallery'));
 const Contact = React.lazy(() => import('./pages/Contact'));
+
+const { HashRouter, Routes, Route } = ReactRouterDOM;
 
 // ScrollToTop component to handle scroll position on route change
 const ScrollToTop = () => {

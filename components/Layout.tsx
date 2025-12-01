@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import * as ReactRouterDOM from 'react-router-dom';
 import { Menu, X, Phone, MapPin, Mail, ChevronDown } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { NAVIGATION, BUSINESS_INFO } from '../constants';
 import Button from './ui/Button';
+
+const { Link, useLocation } = ReactRouterDOM;
 
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -15,6 +17,9 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     setIsMobileMenuOpen(false);
     setActiveDropdown(null);
   }, [location]);
+
+  const MotionSpan = motion.span as any;
+  const MotionDiv = motion.div as any;
 
   return (
     <div className="flex flex-col min-h-screen font-sans text-slate-800 bg-white">
@@ -31,13 +36,13 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
             <span className="flex items-center gap-2"><MapPin size={14} /> {BUSINESS_INFO.location}</span>
           </div>
           <div className="flex gap-4">
-             <motion.span 
+             <MotionSpan 
                initial={{ opacity: 0 }} 
                animate={{ opacity: 1 }} 
                transition={{ delay: 0.5 }}
              >
                Midtown Manhattan's Premier Implant Center
-             </motion.span>
+             </MotionSpan>
           </div>
         </div>
       </div>
@@ -66,7 +71,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                       {item.label}
                       <ChevronDown size={14} />
                       {activeDropdown === item.label && (
-                        <motion.div 
+                        <MotionDiv 
                           layoutId="navUnderline"
                           className="absolute bottom-2 left-0 right-0 h-0.5 bg-secondary" 
                         />
@@ -79,7 +84,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                     >
                       {item.label}
                       {location.pathname === item.path && (
-                        <motion.div 
+                        <MotionDiv 
                           layoutId="navUnderline"
                           className="absolute bottom-2 left-0 right-0 h-0.5 bg-secondary" 
                         />
@@ -90,7 +95,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                   {/* Dropdown */}
                   <AnimatePresence>
                     {item.children && activeDropdown === item.label && (
-                      <motion.div
+                      <MotionDiv
                         initial={{ opacity: 0, y: 10, rotateX: -5 }}
                         animate={{ opacity: 1, y: 0, rotateX: 0 }}
                         exit={{ opacity: 0, y: 10, transition: { duration: 0.15 } }}
@@ -106,16 +111,16 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                             {child.label}
                           </Link>
                         ))}
-                      </motion.div>
+                      </MotionDiv>
                     )}
                   </AnimatePresence>
                 </div>
               ))}
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              <MotionDiv whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                 <Button href={BUSINESS_INFO.bookingUrl} className="ml-4 shadow-md">
                   Book Online
                 </Button>
-              </motion.div>
+              </MotionDiv>
             </nav>
 
             {/* Mobile Menu Button */}
@@ -133,7 +138,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
       {/* Mobile Menu Overlay */}
       <AnimatePresence>
         {isMobileMenuOpen && (
-          <motion.div 
+          <MotionDiv 
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "100vh" }}
             exit={{ opacity: 0, height: 0 }}
@@ -153,7 +158,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                       </button>
                       <AnimatePresence>
                         {activeDropdown === item.label && (
-                          <motion.div 
+                          <MotionDiv 
                             initial={{ height: 0, opacity: 0 }}
                             animate={{ height: "auto", opacity: 1 }}
                             exit={{ height: 0, opacity: 0 }}
@@ -169,7 +174,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                                 {child.label}
                               </Link>
                             ))}
-                          </motion.div>
+                          </MotionDiv>
                         )}
                       </AnimatePresence>
                     </div>
@@ -193,7 +198,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                 </Button>
               </div>
             </div>
-          </motion.div>
+          </MotionDiv>
         )}
       </AnimatePresence>
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { useLocation, Navigate } from 'react-router-dom';
+import * as ReactRouterDOM from 'react-router-dom';
 import { SERVICE_CONTENT } from '../data/services';
 import Button from '../components/ui/Button';
 import SEO from '../components/SEO';
@@ -9,6 +9,8 @@ import { motion } from 'framer-motion';
 import { FadeIn, FadeInStagger, FadeInItem } from '../components/ui/Animations';
 import { BUSINESS_INFO } from '../constants';
 
+const { useLocation, Navigate } = ReactRouterDOM;
+
 const ServiceTemplate: React.FC = () => {
   const location = useLocation();
   const data = SERVICE_CONTENT[location.pathname];
@@ -16,6 +18,9 @@ const ServiceTemplate: React.FC = () => {
   if (!data) {
     return <Navigate to="/services" replace />;
   }
+
+  const MotionDiv = motion.div as any;
+  const MotionLi = motion.li as any;
 
   return (
     <div className="bg-white">
@@ -27,7 +32,7 @@ const ServiceTemplate: React.FC = () => {
       <div className="relative h-[60vh] md:h-[70vh] flex items-center">
         <div className="absolute inset-0">
           <div className="absolute inset-0 bg-slate-900/60 z-10"></div>
-          <motion.div
+          <MotionDiv
             key={data.heroImage}
             initial={{ scale: 1.1, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
@@ -38,10 +43,10 @@ const ServiceTemplate: React.FC = () => {
               src={data.heroImage} 
               alt={data.title}
               className="w-full h-full object-cover"
-              priority={true}
-              sizes="100vw"
+              loading="eager"
+              fetchPriority="high"
             />
-          </motion.div>
+          </MotionDiv>
         </div>
         <div className="container mx-auto px-4 relative z-20">
           <FadeInStagger>
@@ -77,7 +82,7 @@ const ServiceTemplate: React.FC = () => {
               {section.type === 'list' && (
                 <ul className="grid gap-4">
                   {section.content.map((item, i) => (
-                    <motion.li 
+                    <MotionLi 
                       key={i} 
                       initial={{ opacity: 0, x: -20 }}
                       whileInView={{ opacity: 1, x: 0 }}
@@ -87,7 +92,7 @@ const ServiceTemplate: React.FC = () => {
                     >
                       <CheckCircle2 className="text-secondary shrink-0 mt-1" size={20} />
                       <span className="text-slate-700">{item}</span>
-                    </motion.li>
+                    </MotionLi>
                   ))}
                 </ul>
               )}

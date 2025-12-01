@@ -107,7 +107,7 @@ export const TESTIMONIALS: Testimonial[] = [
     name: "Maria U",
     procedure: "Single Tooth Implant / Full Rehabilitation",
     quote: "I never felt like I was going to the dentist, I always felt like I was with family.",
-    image_url: "https://images.squarespace-cdn.com/content/v1/664e5061fa71855fc54da6e5/7ed06f14-c268-47be-a5f9-afcd807af10c/Maria+U.png"
+    image_url: null
   },
   {
     id: "trauma_patient",

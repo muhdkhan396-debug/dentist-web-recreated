@@ -20,8 +20,8 @@ const About: React.FC = () => {
                 src={DOCTOR.headshot_url} 
                 alt={DOCTOR.name} 
                 className="w-full rounded-lg shadow-2xl"
-                priority={true}
-                sizes="(max-width: 1024px) 100vw, 40vw"
+                loading="eager"
+                fetchPriority="high"
               />
               <div className="mt-8 bg-slate-50 p-6 rounded-lg border border-slate-100">
                 <h3 className="font-serif text-xl font-bold text-primary mb-4">Credentials</h3>
